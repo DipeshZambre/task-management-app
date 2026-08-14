@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { CanActivateFn } from '@angular/router';
 
-import { noAuthGuardGuard } from './no-auth.guard';
+import { noAuthGuard } from './no-auth.guard';
 
-describe('noAuthGuardGuard', () => {
+describe('noAuthGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) =>
-    TestBed.runInInjectionContext(() => noAuthGuardGuard(...guardParameters));
+    TestBed.runInInjectionContext(() => noAuthGuard(...guardParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
