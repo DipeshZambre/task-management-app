@@ -1,9 +1,9 @@
-import { Component, ChangeDetectorRef } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
-import { Router, RouterLink } from "@angular/router";
-import { HttpErrorResponse } from "@angular/common/http";
-import { AuthService } from "../../../services/auth.service";
+import { Component, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService } from '../../../services/auth.service';
 
 
 @Component({

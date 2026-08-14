@@ -20,12 +20,12 @@ export class AuthService {
   // Call POST /api/auth/register
   // data = variable and RegisterRequest is datatype joki RegisterRequest model ke through yaha par expose kiya gaya he
   register(data: RegisterRequest): Observable<UserResponse> {
-    return this.http.post<UserResponse>('${this.apiUrl}/auth/register', data);
+    return this.http.post<UserResponse>(`${this.apiUrl}/auth/register`, data);
   }
 
   // Call POST /api/auth/login and store token + user on success
   login(data: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>('${this.apiUrl}/auth/login', data).pipe(
+    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, data).pipe(
       tap(Response => {
         // Store token and user info for use across the app
         localStorage.setItem(this.TOKEN_KEY, Response.accessToken);
