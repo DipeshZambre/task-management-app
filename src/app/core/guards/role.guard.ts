@@ -1,12 +1,12 @@
 import { inject, Inject } from "@angular/core";
-import { CanActivateFn, Router } from "@angular/router";
+import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from "@angular/router";
 import { AuthService } from "../services/auth.service";
 
 
 // Factory function - call with alowed roles to create a role-specific guard.
 // usage in route: canActivate: [roleGuard(['Admin', 'Manager'])]
 
-export const roleGuard = (allowedRoles: string[]): CanActivateFn => {
+export const roleGuard = (p0: RouterStateSnapshot | ActivatedRouteSnapshot, allowedRoles: string[]): CanActivateFn => {
   return () => {
     const authService = inject(AuthService);
     const router = inject(Router);
