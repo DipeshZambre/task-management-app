@@ -1,1 +1,67 @@
-<p>login works!</p>
+<div class="auth-wrapper">
+  <div class="auth-card">
+
+    <!-- Logo -->
+    <div class="auth-header">
+      <div class="logo">
+        <span class="logo-icon">✓</span>
+      </div>
+      <h1>Task Management App</h1>
+      <p>Sign in to manage your tasks</p>
+    </div>
+
+    <!-- API Error Message -->
+    <div class="alert alert-error" *ngIf="errorMessage">
+      <span class="alert-icon">⚠</span>
+      {{ errorMessage }}
+    </div>
+
+    <!-- Login Form -->
+    <form (ngSubmit)="onSubmit()" novalidate>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="text"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+          [class.input-error]="emailInvalid"
+        />
+        <span class="field-error" *ngIf="emailInvalid">
+          Please enter a valid email address.
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="••••••••"
+          autocomplete="current-password"
+          [class.input-error]="passwordInvalid"
+        />
+        <span class="field-error" *ngIf="passwordInvalid">
+          Please enter your password.
+        </span>
+      </div>
+
+      <button type="submit" class="btn-primary" [disabled]="isLoading">
+        <span *ngIf="!isLoading">Sign In</span>
+        <span *ngIf="isLoading" class="spinner"></span>
+      </button>
+
+    </form>
+
+    <p class="auth-footer">
+      Don't have an account?
+      <a routerLink="/register">Create one</a>
+    </p>
+
+  </div>
+</div>
