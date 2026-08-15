@@ -40,9 +40,18 @@ export class Login {
     this.errorMessage = '';
     this.isLoading = true;
     this.cdr.detectChanges();
-
-    this.authService.login({ email: this.email, password: this.password }).subscribe({
-      next: () => {
+/* next: () => {
+        this.router.navigate(['/dashboard']);
+      },*/
+   this.authService.login({ email: this.email, password: this.password }).subscribe({
+      
+      next: (response: any) => {
+        // 1. SAVE THE SECURITY TOKEN FIRST (Crucial fix)
+        if (response && response.token) {
+          localStorage.setItem('token', response.token);
+        }
+        
+        // 2. NOW safely navigate to your dashboard layout
         this.router.navigate(['/dashboard']);
       },
       error: (err: HttpErrorResponse) => {

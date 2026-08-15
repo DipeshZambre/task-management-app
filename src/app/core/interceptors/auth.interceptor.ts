@@ -24,7 +24,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   // Clone the request and attach Authorization header if token exists.
   // HttpRequest objects are immutable so we must clone before modifying.
   const authReq = token
-  ? req.clone({ setHeaders: { Authorization: 'Bearer ${token}'}})
+  ? req.clone({ setHeaders: { Authorization: `Bearer ${token}`}})
   : req;
 
 
