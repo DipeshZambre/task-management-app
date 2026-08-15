@@ -1,0 +1,223 @@
+/* ── Page Layout ──*/
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f0f9ff 0%, #eff6ff 100%);
+  padding: 24px;
+}
+
+/* ── Card ──*/
+.auth-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--shadow-xl);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  animation: slideInUp 0.5s ease-out;
+}
+
+/* ── Header ──*/
+.auth-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.logo {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--color-primary) 0%, #1d4ed8 100%);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  box-shadow: var(--shadow-md);
+  animation: scaleIn 0.5s ease-out 0.1s both;
+}
+
+.logo-icon {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.auth-header h1 {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-neutral-900);
+  margin: 0 0 8px;
+  letter-spacing: -0.5px;
+  animation: fadeIn 0.5s ease-out 0.15s both;
+}
+
+.auth-header p {
+  font-size: 14px;
+  color: var(--color-neutral-500);
+  margin: 0;
+  animation: fadeIn 0.5s ease-out 0.2s both;
+}
+
+/* ── Alerts ──*/
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.alert-error {
+  background: #fff0f0;
+  color: #c0392b;
+  border: 1px solid #ffd5d5;
+}
+
+.alert-success {
+  background: #f0fff4;
+  color: #27ae60;
+  border: 1px solid #c3f0d4;
+}
+
+.alert-icon {
+  font-size: 16px;
+}
+
+/* ── Form ──*/
+.form-group {
+  margin-bottom: 20px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-neutral-700);
+  margin-bottom: 8px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--color-neutral-200);
+  border-radius: 10px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--color-neutral-900);
+  background: var(--color-neutral-50);
+  transition: border-color var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
+  box-sizing: border-box;
+  outline: none;
+}
+
+.form-group input:focus {
+  border-color: var(--color-primary);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  transform: translateY(-1px);
+}
+
+.form-group input::placeholder {
+  color: var(--color-neutral-400);
+}
+
+.field-hint {
+  display: block;
+  font-size: 12px;
+  color: var(--color-neutral-400);
+  margin-top: 6px;
+}
+
+/* ── Submit Button ──*/
+.btn-primary {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, var(--color-primary) 0%, #1d4ed8 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  box-shadow: var(--shadow-md);  position: relative;
+  overflow: hidden;
+  animation: slideInUp 0.4s ease-out 0.3s both;}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--color-primary-hover) 0%, var(--color-primary-active) 100%);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Loading Spinner ──*/
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Footer ──*/
+.auth-footer {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 14px;
+  color: var(--color-neutral-500);
+}
+
+.auth-footer a {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.auth-footer a:hover {
+  color: var(--color-primary-hover);
+}
+
+/* ── Inline Validation ──*/
+.input-error {
+  border-color: var(--color-error) !important;
+  background: var(--color-error-light) !important;
+}
+
+.field-error {
+  display: block;
+  font-size: 12px;
+  color: var(--color-error);
+  margin-top: 6px;
+  animation: slideIn 0.2s ease-out;
+}
