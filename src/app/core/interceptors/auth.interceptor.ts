@@ -1,46 +1,63 @@
-// Interceptor Request response and error handle karta he  
-
-import { HttpInterceptorFn, HttpErrorResponse} from '@angular/common/http';
-import { inject, Inject } from '@angular/core';
+import { HttpInterceptorFn, HttpErrorResponse, HttpRequest } from '@angular/common/http';
+import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, throwError } from 'rxjs';
+import { Observable, catchError, finalize, map, shareReplay, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
-// Auth endpoints should never trigger the auto-logout redirect.
-// A 401 on /auth/login simply means wrong credentials - not an expired session
-const AUTH_ENDPOINTS = ['/auth/login', 'auth/register', 'auth/refresh-token'];
+// Auth endpoints should never trigger refresh/auto-logout.
+// A 401 on /auth/login simply means wrong credentials, not an expired session.
+const AUTH_ENDPOINTS = ['/auth/login', '/auth/register', '/auth/refresh-token', '/auth/revoke-token'];
 
 const isAuthEndpoint = (url: string): boolean =>
   AUTH_ENDPOINTS.some(endpoint => url.includes(endpoint));
 
-
+// Ek hi refresh request in-flight rahe. Agar 5 requests ek saath 401 khayein,
+// toh sab isi ek refresh ka wait karti hain (rotation ki wajah se zaroori:
+// doosri refresh call purana, already-revoked token bhejti).
+let refresh$: Observable<string> | null = null;
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  const token = authService.getToken();
+  // HttpRequest objects are immutable, so clone before modifying.
+  const withToken = (r: HttpRequest<unknown>, token: string | null) =>
+    token ? r.clone({ setHeaders: { Authorization: `Bearer ${token}` } }) : r;
 
-  // Clone the request and attach Authorization header if token exists.
-  // HttpRequest objects are immutable so we must clone before modifying.
-  const authReq = token
-  ? req.clone({ setHeaders: { Authorization: `Bearer ${token}`}})
-  : req;
+  const forceLogout = () => {
+    authService.logout();
+    router.navigate(['/login']);
+  };
 
-
- return next(authReq).pipe(
+  return next(withToken(req, authService.getToken())).pipe(
     catchError((err: HttpErrorResponse) => {
-        // Only auto-logout on 401 for protected endpoints.
-        // Auth endpoints (login/register) handle their own errors in the component.
-        if (err.status === 401 && !isAuthEndpoint(req.url)) {
-            authService.logout();
-            router.navigate(['/login']);
-        }
-
-        // Always re-throw so the component's error handler receives the error
+      // Sirf protected endpoints ke 401 par refresh try karo
+      if (err.status !== 401 || isAuthEndpoint(req.url)) {
         return throwError(() => err);
+      }
+
+      // Refresh token hi nahi hai -> seedha login par bhejo
+      if (!authService.getRefreshToken()) {
+        forceLogout();
+        return throwError(() => err);
+      }
+
+      // Refresh sirf ek baar start ho, baaki requests usi ko share karein
+      refresh$ ??= authService.refreshToken().pipe(
+        map(res => res.accessToken),
+        finalize(() => (refresh$ = null)),
+        shareReplay(1)
+      );
+
+      return refresh$.pipe(
+        // Refresh fail hua (expired/revoked) -> tabhi logout
+        catchError(refreshErr => {
+          forceLogout();
+          return throwError(() => refreshErr);
+        }),
+        // Refresh pass hua -> naye token ke saath original request retry
+        switchMap(newToken => next(withToken(req, newToken)))
+      );
     })
-);
-
+  );
 };
-
